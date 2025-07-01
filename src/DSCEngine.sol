@@ -54,14 +54,14 @@ contract DSCEngine {
 
     function liquidate() external {}
 
-    // The getHealthFactor() function lets user view peoples Heath Factor
+    // The getHealthFactor() function lets user view peoples Health Factor
     /*
     Health Factor: 
         Imagine the user deposits $100 worth of ETH and mints $50 worth of DSC
         so if the threshold amount is set to 150% then at any point of time the users deposited ETH value should be >= 150% the minted DSC.
         In this case if the user has minted $50 worth of DSC then the collaterized ETH they have should be of value >= $75. or they will get liquidated. 
-        so the getHealthFactor gets us the Heath Index which shows if the user is heatlty in the system or no.
-        ** If the user deposited ETH value >= threshold % of their minted DSC, they are healthy, otherwise they are unhealthy. And if they are unhealthy then any user can liquidate the unhealthy user to save the system/ make profit. Liquidate here means that other user will pay the system the DSC and get all the ETH the under collaterized user has in return.
+        so the getHealthFactor gets us the Health Index which shows if the user is healthy in the system or no.
+        ** If the user deposited ETH value >= threshold % of their minted DSC, they are healthy, otherwise they are unhealthy. And if they are unhealthy then any user can liquidate the unhealthy user to save the system/ make profit. Liquidate here means that other user will pay the system the DSC and get all the ETH the under collateralized user has in return.
 
         example:
             ->user deposited $100 amount of ETH
