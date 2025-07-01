@@ -21,7 +21,6 @@
 // private
 // view & pure functions
 
-
 pragma solidity ^0.8.19;
 
 /**
@@ -29,12 +28,11 @@ pragma solidity ^0.8.19;
  * @author Satya Pradhan
  * The systen is designed to be minimal as possible, and ahve the tokens manitain a 1 oken == $1 peg.
  * This StableCoin similar to DAI if DAI had no governacne, no fees and was backed by WETH and WBTC.
- * 
+ *
  * Our DSC sysyten should always be "overcollateralized". At no point, should the value of all collateral <= the $ backed value of all DSC.
  * @notice This contract is the core of the DSC system. It handles all the logic for mining and redeeming DSC, as well as depositing & withdrawing collateral.
  * @notice This contract is very loosly based on MakerDAO (DAI) system.
  */
-
 contract DSCEngine {
     function depositeCollateralAndMintDsc() external {}
 
@@ -74,8 +72,4 @@ contract DSCEngine {
             -> other user sees it and pays the $50 DSC can gets the $74 ETH from the under collateralized user. makes profit of $24? yes?
     */
     function getHealthFactor() external view {}
-
-
-
 }
-
