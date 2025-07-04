@@ -40,3 +40,7 @@ what is Invariant testing? :
 4. In the context of stablecoin collateral, what is the key difference between exogenous and endogenous types?
 
 10. When designing functions that interact with external contracts, why is it generally safer to update the calling contract's internal state *before* making the external call?
+
+4. If a protocol uses a `LIQUIDATION_THRESHOLD` constant set to 50 alongside a `LIQUIDATION_PRECISION` of 100, what minimum over-collateralization ratio does this imply for a user's position to be considered safe (Health Factor >= 1)?
+
+

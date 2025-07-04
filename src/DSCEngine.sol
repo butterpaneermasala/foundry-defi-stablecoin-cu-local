@@ -94,7 +94,6 @@ contract DSCEngine is ReentrancyGuard {
         _;
     }
 
-    function depositeCollateralAndMintDsc() external {}
 
     ///////////////////
     // Functions //
@@ -118,13 +117,24 @@ contract DSCEngine is ReentrancyGuard {
     // External Functions //
     ///////////////////
 
+    function depositCollateralAndMintDsc(
+        address tokenCollateralAddress,
+        uint256 amountCollateral,
+        uint256 amountDscToMint
+    ) 
+        external 
+    {
+        depositCollateral(tokenCollateralAddress, amountCollateral);
+        mintDsc(amountDscToMint);
+    }
+
     /**
      * @notice follows CEI (check, effet, interact)
      * @param tokenCollateralAddress The address of the token that is to deposit as collateral
      * @param amountCollateral The which is to deposit
      */
-    function despositeCollateral(address tokenCollateralAddress, uint256 amountCollateral)
-        external
+    function depositCollateral(address tokenCollateralAddress, uint256 amountCollateral)
+        public
         moreThanZero(amountCollateral)
         isAllowedTokens(tokenCollateralAddress)
         nonReentrant
@@ -150,7 +160,7 @@ contract DSCEngine is ReentrancyGuard {
      * @notice They must have more collateral value than the minimum threshold
      */
     function mintDsc(uint256 amountDscToMint) 
-        external 
+        public 
         moreThanZero(amountDscToMint) 
         nonReentrant 
     {
