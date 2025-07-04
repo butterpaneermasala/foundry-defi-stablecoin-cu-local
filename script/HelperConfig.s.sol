@@ -6,7 +6,6 @@ import {Script} from "forge-std/Script.sol";
 import {MockV3Aggregator} from "../test/mocks/MockV3Aggregator.sol";
 import {ERC20Mock} from "@openzeppelin/contracts/mocks/ERC20Mock.sol";
 
-
 contract HelperConfig is Script {
     struct NetworkConfig {
         address wethUsdPricefeed;
@@ -31,7 +30,7 @@ contract HelperConfig is Script {
         }
     }
 
-    function getSepoliaethConfig() public view returns(NetworkConfig memory ) {
+    function getSepoliaethConfig() public view returns (NetworkConfig memory) {
         return NetworkConfig({
             wethUsdPricefeed: 0x694AA1769357215DE4FAC081bf1f309aDC325306,
             wbtcUsdPriceFeed: 0x1b44F3514812d835EB1BDB0acB33d3fA3351Ee43,
@@ -41,22 +40,16 @@ contract HelperConfig is Script {
         });
     }
 
-    function getOrCreateAnvilEthConfig() public returns(NetworkConfig memory) {
-        if (activeNetworkConfig.wethUsdPricefeed != address(0)){
+    function getOrCreateAnvilEthConfig() public returns (NetworkConfig memory) {
+        if (activeNetworkConfig.wethUsdPricefeed != address(0)) {
             return activeNetworkConfig;
         }
 
         vm.startBroadcast();
-        MockV3Aggregator ethUsdPriceFeed = new MockV3Aggregator(
-            DECIMALS,
-            ETH_USD_PRCIE
-        );
+        MockV3Aggregator ethUsdPriceFeed = new MockV3Aggregator(DECIMALS, ETH_USD_PRCIE);
         ERC20Mock wethMock = new ERC20Mock("WETH", "WETH", msg.sender, 1000e8);
 
-        MockV3Aggregator btcUsdPriceFeed = new MockV3Aggregator(
-            DECIMALS,
-            ETH_USD_PRCIE
-        );
+        MockV3Aggregator btcUsdPriceFeed = new MockV3Aggregator(DECIMALS, ETH_USD_PRCIE);
         ERC20Mock wbtcMock = new ERC20Mock("WBTC", "WBTC", msg.sender, 1000e8);
 
         vm.stopBroadcast();
@@ -68,6 +61,5 @@ contract HelperConfig is Script {
             wbtc: address(wbtcMock),
             deployerKey: DEFAULT_ANVIL_KEY
         });
-
     }
 }

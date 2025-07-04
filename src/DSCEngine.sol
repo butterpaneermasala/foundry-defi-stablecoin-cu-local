@@ -59,8 +59,6 @@ contract DSCEngine is ReentrancyGuard {
     uint256 private constant LIQUIDATION_PRECISION = 100;
     uint256 private constant MIN_HEALTH_FACTOR = 1;
 
-
-
     mapping(address token => address priceFeed) private s_priceFeed; // tokenToPriceFeed
     // this mapping maps the token address to the their pricefeeds so whenever someone wants to deposit collateral they will be able to deposit the ONLY the tokens that are set here
     // we will set these address in our constructor
@@ -94,7 +92,6 @@ contract DSCEngine is ReentrancyGuard {
         _;
     }
 
-
     ///////////////////
     // Functions //
     ///////////////////
@@ -121,9 +118,7 @@ contract DSCEngine is ReentrancyGuard {
         address tokenCollateralAddress,
         uint256 amountCollateral,
         uint256 amountDscToMint
-    ) 
-        external 
-    {
+    ) external {
         depositCollateral(tokenCollateralAddress, amountCollateral);
         mintDsc(amountDscToMint);
     }
@@ -146,24 +141,18 @@ contract DSCEngine is ReentrancyGuard {
         if (!success) {
             revert DSCEngine__TransferFailed();
         }
-
     }
 
     function redeemCollateralForDsc() external {}
 
     function redeemCollateral() external {}
-    
 
     /**
      * @notice follows CEI
      * @param amountDscToMint The amount to DSC the user wants to mint
      * @notice They must have more collateral value than the minimum threshold
      */
-    function mintDsc(uint256 amountDscToMint) 
-        public 
-        moreThanZero(amountDscToMint) 
-        nonReentrant 
-    {
+    function mintDsc(uint256 amountDscToMint) public moreThanZero(amountDscToMint) nonReentrant {
         // To Let the user mint DSC we need to check couple of things first
         // 1. The deposited collateral value > DSC amount they want to mint
         s_DscMinted[msg.sender] += amountDscToMint;
@@ -208,7 +197,11 @@ contract DSCEngine is ReentrancyGuard {
     // Private & Internal View Functions //
     ////////////////////////////////////////
 
-    function _getAccountInformation(address user) private view returns(uint256 totalDscMinted, uint256 collateralValueInUsd) {
+    function _getAccountInformation(address user)
+        private
+        view
+        returns (uint256 totalDscMinted, uint256 collateralValueInUsd)
+    {
         totalDscMinted = s_DscMinted[user];
         collateralValueInUsd = getAccountCollateralValue(user);
     }
@@ -218,13 +211,14 @@ contract DSCEngine is ReentrancyGuard {
      * @param user the user
      * if a user get below 1, then they can get liquidated
      */
-    function _healthFactor(address user) private view returns(uint256) {
+    function _healthFactor(address user) private view returns (uint256) {
         // totak DSC minted
         // total collateral VAULE
         (uint256 totalDscMinted, uint256 collateralValueInUsd) = _getAccountInformation(user);
         uint256 collateralAdjustedForThreshold = (collateralValueInUsd * LIQUIDATION_THRESHOLD) / LIQUIDATION_PRECISION;
         return (collateralAdjustedForThreshold * PRECISION / totalDscMinted); // if this is less than 1 then the user can get liquidated
     }
+
     function _revertIfHealthFactorIsBroken(address user) internal view {
         // 1. Cheack health factor (do they have enough collateral ??)
         // 2. Revert if they dont have a good health factor
@@ -239,21 +233,20 @@ contract DSCEngine is ReentrancyGuard {
     // Public & External View Functions //
     ////////////////////////////////////////
 
-    function getAccountCollateralValue(address user) public view returns(uint256 totalCollateralValueInUsd) {
+    function getAccountCollateralValue(address user) public view returns (uint256 totalCollateralValueInUsd) {
         // loop through each collateral token, get the amount they have deposited, and map it to the pice, to get the USD value
         // uint256 totalCollateralValueInUsd = 0;
         for (uint256 i = 0; i < s_collateralTokens.length; i++) {
             address token = s_collateralTokens[i];
             uint256 amount = s_collateralDeposited[user][token];
             totalCollateralValueInUsd += getUsdValue(token, amount);
-
         }
         return totalCollateralValueInUsd;
     }
 
-    function getUsdValue(address token, uint256 amount) public view returns(uint256) {
+    function getUsdValue(address token, uint256 amount) public view returns (uint256) {
         AggregatorV3Interface priceFeed = AggregatorV3Interface(s_priceFeed[token]);
-        (,int256 price,,,) = priceFeed.latestRoundData();
+        (, int256 price,,,) = priceFeed.latestRoundData();
         // 1 ETH = $1000
         // The returned vlaue from CL will be 1000 * 1e8
         return ((uint256(price) * ADDITIONAL_FEED_PRECISION) * amount) / PRECISION;

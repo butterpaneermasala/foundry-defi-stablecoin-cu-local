@@ -9,7 +9,6 @@ import {DSCEngine} from "../../src/DSCEngine.sol";
 import {HelperConfig} from "../../script/HelperConfig.s.sol";
 import {ERC20Mock} from "@openzeppelin/contracts/mocks/ERC20Mock.sol";
 
-
 contract DSCEngineTest is Test {
     error DSCEngine__NeedsMoreThanZero();
 
@@ -39,9 +38,8 @@ contract DSCEngineTest is Test {
         // We have 15 ETH
         // 15e18 * 2400/ETH = 36000e18
         uint256 expectedUsd = 36000e18;
-        uint256 actualUsd =  dsce.getUsdValue(weth ,ethAmount);
-        assertEq(actualUsd,expectedUsd);
-
+        uint256 actualUsd = dsce.getUsdValue(weth, ethAmount);
+        assertEq(actualUsd, expectedUsd);
     }
 
     ///////////////////////////////
@@ -58,7 +56,5 @@ contract DSCEngineTest is Test {
         /*
         Note: Here the vm.expectRevert is placed above the expected error, vm.expectRevert basically tells foundry that "Hey the next line should throw an error" or the test fails, here if dsce.depositeCollateral throws an error then the test passes as expected
          */
-
     }
-
 }
