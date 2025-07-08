@@ -33,7 +33,7 @@ contract DSCEngineTest is Test {
     /// Price Test ///
     ///////////////////
 
-    function testGetUsdValue() public {
+    function testGetUsdValue() public view {
         uint256 ethAmount = 15e18;
         // We have 15 ETH
         // 15e18 * 2400/ETH = 36000e18
@@ -50,7 +50,7 @@ contract DSCEngineTest is Test {
         vm.startPrank(USER);
         ERC20Mock(weth).approve(address(dsce), AMOUNT_COLLATERAL);
         vm.expectRevert(DSCEngine.DSCEngine__NeedsMoreThanZero.selector);
-        dsce.despositCollateral(weth, 0);
+        dsce.depositCollateral(weth, 0);
         vm.stopPrank();
 
         /*
